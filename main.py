@@ -85,7 +85,7 @@ def add_list(list1, to):
         xx = list[0]
         try:
             client.users_playlists_insert_track(to, xx[0], xx[1])
-        except Exception as e:
+        except yandex_music.exceptions.NetworkError as e:
             a = str(e)
             # print(a)
             start = a.find('actual revision') + 17
@@ -94,7 +94,7 @@ def add_list(list1, to):
             rev = int(str(a[start:end]))
             try:
                 client.users_playlists_insert_track(to, xx[0], xx[1], revision=rev)
-            except Exception:
+            except yandex_music.exceptions.NetworkError:
                 # print('err')
                 pass
             else:
@@ -107,7 +107,7 @@ def erase_playlist(playlist):
     while len(client.users_playlists(playlist).tracks) > 0:
         try:
             client.users_playlists_delete_track(kind=playlist, from_=0, to=len(client.users_playlists(playlist).tracks), revision=11)
-        except Exception as e:
+        except yandex_music.exceptions.NetworkError as e:
             a = str(e)
             # print(a)
             start = a.find('actual revision') + 17
@@ -116,7 +116,7 @@ def erase_playlist(playlist):
             rev = int(str(a[start:end]))
             try:
                 client.users_playlists_delete_track(kind=playlist, from_=0, to=len(client.users_playlists(playlist).tracks), revision=rev)
-            except Exception:
+            except yandex_music.exceptions.NetworkError:
                 pass
 
 
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     token = input('Enter token: ')
     try:
         client = Client(token).init()
-    except Exception as e:
+    except yandex_music.exceptions.NetworkError as e:
         print('token is unavailable')
     else:
         print('authorization done')
